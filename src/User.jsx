@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import UserProfile from './UserProfile';
 
 const initialAddress = () => {
   return {
@@ -17,6 +18,8 @@ const getAddress = () => {
     }, 3000);
   });
 };
+
+export const UserContext = createContext();
 
 const User = () => {
   const [name] = useState('Alex');
@@ -59,31 +62,44 @@ const User = () => {
   // })
 
   // giong componentDidMount, effect chay duy nhat 1 lan
+  // thuong dung de goi api
   useEffect(() => {
     console.log('useEffect with empty array!');
+
     getAddress().then((res) => {
-      setAddressList(res);
+      setAddress((prevAddress) => {
+        const newAddress = {
+          ...prevAddress,
+          nation: res[0],
+        };
+        return newAddress;
+      });
     });
+
+    return () => {
+      console.log('Huy goi API');
+    };
   }, []);
 
   console.log('component re-render');
 
   return (
     <div>
-      <h1>User Functional Component</h1>
-      <ul>
-        <li>First Name: {name}</li>
-        <li>Age: {age}</li>
-        <li>Nation: {address.nation}</li>
-        <li>Street: {address.city.street}</li>
-        <li>Area: {address.city.area}</li>
-      </ul>
-      <button onClick={increaseAge}>Increase age</button>
       <button onClick={reRender}>Re-render</button>
       {/* <button onClick={changeCity}>Chang city to Ha Noi</button> */}
       <button onClick={changeCityArea}>Change area city</button>
       <br />
       {addressList ? JSON.stringify(addressList) : 'Loading...'}
+      <br />
+      <UserContext.Provider
+        value={{
+          address,
+          age,
+          name,
+          increaseAge,
+        }}>
+        <UserProfile />
+      </UserContext.Provider>
     </div>
   );
 };

@@ -1,12 +1,14 @@
-import "./App.css";
-import User from "./User";
-import UserClassComponent from "./User.class";
+import './App.css';
+import Cart from './Header/Cart';
+import Navigation from './Header/Navigation';
+// import User from './User';
 
 function App() {
   return (
     <div className="App">
-      <UserClassComponent />
-      <User />
+      {/* <User /> */}
+      <Cart />
+      <Navigation />
     </div>
   );
 }
